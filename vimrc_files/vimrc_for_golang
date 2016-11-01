@@ -1,0 +1,74 @@
+"This file needs to be copied to your home dir, instead of staying here. It should live at ~/.vimrc
+
+set number
+set nocompatible " be iMproved
+filetype off " required!
+
+set expandtab
+set ts=2
+set sw=2
+
+
+set rtp+=~/.vim/bundle/Vundle.vim/
+set rtp+=$GOROOT/misc/vim
+"set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
+
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim'
+Plugin 'fatih/vim-go'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'majutsushi/tagbar'
+Plugin 'scrooloose/nerdtree'
+Plugin 'jstemmer/gotags'
+Plugin 'nsf/gocode'
+
+call vundle#end()
+filetype plugin indent on " required!
+syntax on
+
+au BufWritePost *.go silent! !ctags --recurse=yes
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+
+""au BufWritePost *.go silent! %!goimports
+"let NERDTreeDirArrows=0
+let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
+
+let g:tagbar_type_go = {
+      \ 'ctagstype' : 'go',
+      \ 'kinds' : [
+      \ 'p:package',
+      \ 'i:imports:1',
+      \ 'c:constants',
+      \ 'v:variables',
+      \ 't:types',
+      \ 'n:interfaces',
+      \ 'w:fields',
+      \ 'e:embedded',
+      \ 'm:methods',
+      \ 'r:constructor',
+      \ 'f:functions'
+      \ ],
+      \ 'sro' : '.',
+      \ 'kind2scope' : {
+      \ 't' : 'ctype',
+      \ 'n' : 'ntype'
+      \ },
+      \ 'scope2kind' : {
+      \ 'ctype' : 't',
+      \ 'ntype' : 'n'
+      \ },
+      \ 'ctagsbin' : 'gotags',
+      \ 'ctagsargs' : '-sort -silent'
+      \ }
+nmap <F3> :NERDTreeToggle<CR>
+nmap <F5> :make<CR>:copen<CR>
+
+" Map Ctrl-c Ctrl-c to open tagbar
+ map <silent> <C-c><C-c> :TagbarOpen fj<Cr>
+" " Map Ctrl-c Ctrl-c to open tagbar
+ map <silent> <C-c><C-x> :TagbarClose<Cr>
+
+colorscheme molokai
